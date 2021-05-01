@@ -1,3 +1,0 @@
-/home/niu2x/project/gxm/build/CMakeFiles/rebuild_cache.dir
-/home/niu2x/project/gxm/build/CMakeFiles/edit_cache.dir
-/home/niu2x/project/gxm/build/CMakeFiles/gxm.dir
