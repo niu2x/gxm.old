@@ -47,7 +47,10 @@ public:
     void bind_to(bind_point target);
     void unbind();
 
-    void resize(size_t bytes);
+    void   resize(size_t bytes);
+    size_t size() const noexcept {
+        return size_;
+    }
 
     bind_point current_bp() const noexcept {
         return active_buffers[(size_t)(current_bp_)] == name_
@@ -65,12 +68,15 @@ public:
     void *map(access p_access);
     void  unmap();
 
+    void set_data(size_t offset, const void *ptr, size_t size);
+
 private:
     GLuint name_;
 
-    bool immutable_;
-    bool alloced_;
-    bool maping_;
+    bool   immutable_;
+    bool   alloced_;
+    bool   maping_;
+    size_t size_;
 
     usage usage_hint_;
 

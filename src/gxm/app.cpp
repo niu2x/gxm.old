@@ -5,8 +5,8 @@ namespace gxm {
 namespace {
 
 void default_update() {
-    glClearColor(1, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    // glClearColor(1, 0, 0, 1);
+    // glClear(GL_COLOR_BUFFER_BIT);
 }
 
 const int_size default_window_size = {640, 480};
@@ -47,7 +47,7 @@ void app::setup(int argc, char *argv[]) {
     assert(glew_init_result == GLEW_OK);
 
     gl_context::create_instance();
-    gl_context_ = gl_context::instance();
+    gl_context_ = &(gl_context::instance());
     gl_context_->dump_infos();
 }
 
@@ -64,13 +64,21 @@ void app::cleanup() noexcept {
     glfwTerminate();
 }
 
+void app::set_update(update_t p_update) noexcept {
+    assert(p_update != nullptr);
+    update_ = p_update;
+}
+
 void app::run() {
     assert(main_window_);
-
+    auto clear_bits = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
+                      GL_STENCIL_BUFFER_BIT;
     while (!glfwWindowShouldClose(main_window_)) {
+        update_();
+        glClear(clear_bits);
+        gl_context_->draw();
         glfwSwapBuffers(main_window_);
         glfwPollEvents();
-        update_();
     }
 }
 

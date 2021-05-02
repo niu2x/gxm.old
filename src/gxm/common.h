@@ -24,7 +24,8 @@ namespace gxm {
 
 inline void unused(...) {}
 
-#define GXM_MAP_ENUM(map, v) map[uint8_t(v)]
+#define GXM_MAP_ENUM(map, v)   map[uint8_t(v)]
+#define GXM_OFFSET_OF(st, mem) (&((reinterpret_cast<st *>(0))->mem))
 
 } // namespace gxm
 

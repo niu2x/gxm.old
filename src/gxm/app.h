@@ -26,6 +26,8 @@ public:
 
     void run();
 
+    void set_update(update_t p_update) noexcept;
+
 private:
     GLFWwindow *main_window_;
     bool        fullscreen_;

@@ -9,6 +9,7 @@ gl_buffer::gl_buffer(bool immutable)
     , immutable_(immutable)
     , alloced_(false)
     , maping_(false)
+    , size_(0)
     , usage_hint_(usage::count)
     , current_bp_(bind_point::count) {
     glGenBuffers(1, &name_);
@@ -71,17 +72,40 @@ void gl_buffer::resize(size_t bytes) {
     assert(usage_hint_ != usage::count);
     assert(!maping_);
 
-    auto gl_target = MAP(gl_buffer_map, current_bp_);
+    if (size_ == bytes)
+        return;
 
+    std::unique_ptr<std::vector<uint8_t>> origin_data;
+
+    if (size_ > 0) {
+        origin_data = std::make_unique<std::vector<uint8_t>>();
+        origin_data->resize(size_);
+        void *ptr = map(access::read);
+        memcpy(origin_data->data(), ptr, size_);
+        unmap();
+    }
+
+    size_ = bytes;
+
+    auto  gl_target = MAP(gl_buffer_map, current_bp_);
+    auto *ptr       = origin_data ? origin_data->data() : nullptr;
     if (immutable_) {
         auto bits = GL_DYNAMIC_STORAGE_BIT | GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
-        glBufferStorage(gl_target, bytes, nullptr, bits);
+        glBufferStorage(gl_target, bytes, ptr, bits);
     } else {
         auto gl_usage = MAP(gl_usage_map, usage_hint_);
-        glBufferData(gl_target, bytes, nullptr, gl_usage);
+        glBufferData(gl_target, bytes, ptr, gl_usage);
     }
 
     alloced_ = true;
+}
+
+void gl_buffer::set_data(size_t offset, const void *ptr, size_t size) {
+    assert(!maping_);
+    assert(current_bp() != bind_point::count);
+    assert(offset + size <= size_);
+
+    glBufferSubData(MAP(gl_buffer_map, current_bp_), offset, size, ptr);
 }
 
 void gl_buffer::unbind() {

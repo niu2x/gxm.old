@@ -24,6 +24,10 @@ void gl_context::delete_instance() {
     instance_ = nullptr;
 }
 
+void gl_context::set_clear_color(const color &p_color) {
+    glClearColor(p_color.r, p_color.g, p_color.b, p_color.a);
+}
+
 void gl_context::dump_infos() {
     GXM_LOG_I << "GL_VENDOR: " << glGetString(GL_VENDOR);
     GXM_LOG_I << "GL_RENDERER: " << glGetString(GL_RENDERER);

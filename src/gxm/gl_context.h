@@ -1,10 +1,12 @@
 #ifndef GXM_GL_CONTEXT_H
 #define GXM_GL_CONTEXT_H
 
+#include <memory>
+
 #include <GL/glew.h>
 #include <boost/noncopyable.hpp>
 
-#include <memory>
+#include "common.h"
 
 namespace gxm {
 
@@ -13,12 +15,14 @@ public:
     static void create_instance();
     static void delete_instance();
 
-    static gl_context *instance() noexcept {
-        return instance_;
+    static gl_context &instance() noexcept {
+        return *instance_;
     }
 
     void draw();
     void dump_infos();
+
+    void set_clear_color(const color &p_color);
 
 private:
     gl_context();

@@ -1,3 +1,6 @@
+#ifndef GXM_EXCEPTION_H
+#define GXM_EXCEPTION_H
+
 #include <exception>
 
 namespace gxm {
@@ -11,8 +14,12 @@ public:
     }
 
 private:
-    static constexpr size_t max_message_len_ = 64;
-    char                    message_[max_message_len_];
+    enum {
+        max_message_len_ = 64,
+    };
+    char message_[max_message_len_];
 };
 
 } // namespace gxm
+
+#endif
