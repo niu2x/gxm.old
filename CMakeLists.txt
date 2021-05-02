@@ -21,6 +21,10 @@ target_link_libraries(gxm PRIVATE GLEW::GLEW)
 find_package(Threads)
 target_link_libraries(gxm PRIVATE Threads::Threads)
 
+add_subdirectory(libs/glsl-optimizer)
+target_link_libraries(gxm PRIVATE glsl_optimizer)
+
+
 message(STATUS "Boost_FIND_COMPONENTS ${Boost_FIND_COMPONENTS}")
 
 find_package(Boost COMPONENTS log)

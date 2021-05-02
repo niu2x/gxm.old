@@ -15,6 +15,7 @@ public:
     enum class shader_type : uint8_t {
         vertex,
         fragment,
+        geometry,
         count,
     };
 

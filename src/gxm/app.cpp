@@ -46,15 +46,15 @@ void app::setup(int argc, char *argv[]) {
     auto glew_init_result = glewInit();
     assert(glew_init_result == GLEW_OK);
 
-    // gl_context::create_instance();
-    // gl_context_ = gl_context::instance();
-    // gl_context_->dump_infos();
+    gl_context::create_instance();
+    gl_context_ = gl_context::instance();
+    gl_context_->dump_infos();
 }
 
 void app::cleanup() noexcept {
 
-    // gl_context_ = nullptr;
-    // gl_context::delete_instance();
+    gl_context_ = nullptr;
+    gl_context::delete_instance();
 
     assert(main_window_);
 

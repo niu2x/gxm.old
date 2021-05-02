@@ -6,7 +6,7 @@
 #include <boost/noncopyable.hpp>
 
 #include "common.h"
-// #include "gl_context.h"
+#include "gl_context.h"
 
 namespace gxm {
 
@@ -30,8 +30,8 @@ private:
     GLFWwindow *main_window_;
     bool        fullscreen_;
 
-    update_t update_;
-    // gl_context *gl_context_;
+    update_t    update_;
+    gl_context *gl_context_;
 
     int_size main_window_size_;
 
