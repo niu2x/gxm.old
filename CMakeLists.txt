@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.11.0 FATAL_ERROR)
 
 project(GXM VERSION 0.1.0 LANGUAGES CXX C)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+
 add_library(gxm "")
 
 find_package(glfw3)
@@ -37,6 +42,7 @@ target_sources(gxm PRIVATE
 	src/gxm/texture.cpp
 	src/gxm/gl_buffer.cpp
 	src/gxm/gl_context.cpp
+	src/gxm/gl_program.cpp
 	src/gxm/exception.cpp
 	src/gxm/app.cpp
 )

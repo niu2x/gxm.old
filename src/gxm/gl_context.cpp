@@ -24,4 +24,12 @@ void gl_context::delete_instance() {
     instance_ = nullptr;
 }
 
+void gl_context::dump_infos() {
+    GXM_LOG_I << "GL_VENDOR: " << glGetString(GL_VENDOR);
+    GXM_LOG_I << "GL_RENDERER: " << glGetString(GL_RENDERER);
+    GXM_LOG_I << "GL_VERSION: " << glGetString(GL_VERSION);
+    GXM_LOG_I << "GL_SHADING_LANGUAGE_VERSION: "
+              << glGetString(GL_SHADING_LANGUAGE_VERSION);
+}
+
 } // namespace gxm

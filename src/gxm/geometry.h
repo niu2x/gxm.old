@@ -3,14 +3,17 @@
 
 namespace gxm {
 
+namespace geometry {
+
 template <class T>
 class size_t {
 public:
     T width, height;
 };
+} // namespace geometry
 
-using size     = size_t<double>;
-using int_size = size_t<int>;
+using size     = geometry::size_t<double>;
+using int_size = geometry::size_t<int>;
 
 } // namespace gxm
 

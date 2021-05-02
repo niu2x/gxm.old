@@ -10,13 +10,15 @@ namespace gxm {
 
 class gl_context : private boost::noncopyable {
 public:
-    static void        create_instance();
-    static void        delete_instance();
+    static void create_instance();
+    static void delete_instance();
+
     static gl_context *instance() noexcept {
         return instance_;
     }
 
     void draw();
+    void dump_infos();
 
 private:
     gl_context();
