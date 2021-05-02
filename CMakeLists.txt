@@ -10,25 +10,25 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(gxm "")
 
 find_package(glfw3)
-target_link_libraries(gxm PRIVATE glfw)
+target_link_libraries(gxm PUBLIC glfw)
 
 find_package(OpenGL)
-target_link_libraries(gxm PRIVATE OpenGL::OpenGL)
+target_link_libraries(gxm PUBLIC OpenGL::OpenGL)
 
 find_package(GLEW)
-target_link_libraries(gxm PRIVATE GLEW::GLEW)
+target_link_libraries(gxm PUBLIC GLEW::GLEW)
 
 find_package(Threads)
-target_link_libraries(gxm PRIVATE Threads::Threads)
+target_link_libraries(gxm PUBLIC Threads::Threads)
 
 add_subdirectory(libs/glsl-optimizer)
-target_link_libraries(gxm PRIVATE glsl_optimizer)
+target_link_libraries(gxm PUBLIC glsl_optimizer)
 
 
 message(STATUS "Boost_FIND_COMPONENTS ${Boost_FIND_COMPONENTS}")
 
 find_package(Boost COMPONENTS log)
-target_link_libraries(gxm PRIVATE 
+target_link_libraries(gxm PUBLIC 
 	Boost::headers
 	Boost::log
 )
@@ -51,8 +51,10 @@ target_sources(gxm PRIVATE
 	src/gxm/gl_program.cpp
 	src/gxm/gl_draw_polygon.cpp
 	src/gxm/gl_vertex.cpp
+	src/gxm/gl_vertex_array.cpp
 	src/gxm/exception.cpp
 	src/gxm/geometry.cpp
+	src/gxm/log.cpp
 	src/gxm/app.cpp
 )
 

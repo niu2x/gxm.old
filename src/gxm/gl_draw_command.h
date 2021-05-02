@@ -12,6 +12,12 @@ namespace gxm {
 
 class gl_draw_command : private boost::noncopyable {
 public:
+    enum class mode_t {
+        point,
+        line,
+        triangle,
+    };
+
     gl_draw_command();
     virtual ~gl_draw_command();
     virtual void draw() = 0;
@@ -27,9 +33,17 @@ public:
         return program_;
     }
 
+    mode_t mode() const noexcept {
+        return mode_;
+    }
+    void set_mode(mode_t p_mode) {
+        mode_ = p_mode;
+    }
+
 private:
     gl_blend    blend_;
     gl_program *program_;
+    mode_t      mode_;
 };
 
 } // namespace gxm

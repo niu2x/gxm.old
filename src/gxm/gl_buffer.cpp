@@ -64,6 +64,8 @@ void gl_buffer::bind_to(bind_point target) {
     glBindBuffer(gl_target, name_);
 
     MAP(active_buffers, current_bp_) = name_;
+
+    GXM_LOG_I << "bind_to " << (int)target;
 }
 
 void gl_buffer::resize(size_t bytes) {
@@ -91,10 +93,10 @@ void gl_buffer::resize(size_t bytes) {
     auto *ptr       = origin_data ? origin_data->data() : nullptr;
     if (immutable_) {
         auto bits = GL_DYNAMIC_STORAGE_BIT | GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
-        glBufferStorage(gl_target, bytes, ptr, bits);
+        glBufferStorage(gl_target, size_, ptr, bits);
     } else {
         auto gl_usage = MAP(gl_usage_map, usage_hint_);
-        glBufferData(gl_target, bytes, ptr, gl_usage);
+        glBufferData(gl_target, size_, ptr, gl_usage);
     }
 
     alloced_ = true;
@@ -106,6 +108,18 @@ void gl_buffer::set_data(size_t offset, const void *ptr, size_t size) {
     assert(offset + size <= size_);
 
     glBufferSubData(MAP(gl_buffer_map, current_bp_), offset, size, ptr);
+    assert(!glGetError());
+}
+
+void gl_buffer::dump() {
+    assert(!maping_);
+    assert(current_bp() != bind_point::count);
+    uint16_t *ptr = (uint16_t *)map(access::read);
+    unused(ptr);
+    // for (size_t i = 0; i < size_ / 2; i++)
+    //     printf("%u ", ptr[i]);
+    // printf("\n");
+    unmap();
 }
 
 void gl_buffer::unbind() {
@@ -118,19 +132,27 @@ void gl_buffer::unbind() {
     }
 }
 
+void gl_buffer::invalid_binds() {
+    memset(active_buffers, 0, sizeof(active_buffers));
+}
+
 void *gl_buffer::map(access p_access) {
     assert(current_bp() != bind_point::count);
     assert(!maping_);
 
     maping_ = true;
-    return glMapBuffer(MAP(gl_buffer_map, current_bp_),
-                       MAP(gl_access_map, p_access));
+    assert(!glGetError());
+    auto *ptr = glMapBuffer(MAP(gl_buffer_map, current_bp_),
+                            MAP(gl_access_map, p_access));
+    assert(!glGetError());
+    return ptr;
 }
 
 void gl_buffer::unmap() {
     assert(current_bp() != bind_point::count);
     assert(maping_);
     glUnmapBuffer(MAP(gl_buffer_map, current_bp_));
+    maping_ = false;
 }
 
 } // namespace gxm

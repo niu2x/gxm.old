@@ -29,31 +29,44 @@ bool check_required_shaders(const gl_program::source &p_source) {
 
 GLuint compile_shader(gl_program::shader_type type, const char *source) {
 
+    GXM_LOG_T << "compile_shader " << 0 << "type:" << (size_t)type;
     auto name = glCreateShader(GXM_MAP_ENUM(gl_shader_map, type));
+    GXM_LOG_T << "compile_shader " << 1;
     assert(name != 0);
+    GXM_LOG_T << "compile_shader " << 1.1;
     assert(source != nullptr);
+    GXM_LOG_T << "compile_shader " << 1.2;
 
     glShaderSource(name, 1, &source, nullptr);
+    GXM_LOG_T << "compile_shader " << 2;
 
     glCompileShader(name);
+    GXM_LOG_T << "compile_shader " << 3;
 
     GLint success = 0;
     glGetShaderiv(name, GL_COMPILE_STATUS, &success);
+    GXM_LOG_T << "compile_shader " << 4;
 
     if (success == GL_FALSE) {
         GLint maxLength = 0;
+        GXM_LOG_T << "compile_shader " << 5;
         glGetShaderiv(name, GL_INFO_LOG_LENGTH, &maxLength);
 
+        GXM_LOG_T << "compile_shader " << 6;
         std::vector<GLchar> error_log(maxLength);
         glGetShaderInfoLog(name, maxLength, &maxLength, &error_log[0]);
 
+        GXM_LOG_T << "compile_shader " << 7;
         GXM_LOG_E << "glsl compile failed: " << error_log.data();
         glDeleteShader(name); // Don't leak the shader.
         return 0;
     }
+    GXM_LOG_T << "compile_shader " << 8;
 
     return name;
 }
+
+auto opt_enable = false;
 
 using opt_source =
     std::map<gl_program::shader_type, std::pair<const char *, std::string>>;
@@ -67,11 +80,11 @@ opt_source opt_glsl_source(const gl_program::source &p_source) {
 
         glslopt_shader_type opt_shader_type;
 
-        if (it.first == gl_program::shader_type::vertex) {
+        if (opt_enable && it.first == gl_program::shader_type::vertex) {
             opt_shader_type = kGlslOptShaderVertex;
         }
 
-        else if (it.first == gl_program::shader_type::fragment) {
+        else if (opt_enable && it.first == gl_program::shader_type::fragment) {
             opt_shader_type = kGlslOptShaderFragment;
         }
 
@@ -89,7 +102,7 @@ opt_source opt_glsl_source(const gl_program::source &p_source) {
                 nullptr, new_source);
         } else {
             auto error_log = glslopt_get_log(shader);
-            GXM_LOG_E << "glslopt_optimize error: " << error_log;
+            GXM_LOG_F << "glslopt_optimize error: " << error_log;
             my_opt_source[it.first] = std::make_pair<const char *, std::string>(
                 (const char *)(it.second), "");
         }
@@ -108,6 +121,10 @@ gl_program::gl_program()
 gl_program::~gl_program() {
     if (valid())
         glDeleteProgram(name_);
+}
+
+void gl_program::use() {
+    glUseProgram(name_);
 }
 
 bool gl_program::init(const source &p_source) {
@@ -136,8 +153,10 @@ bool gl_program::init(const source &p_source) {
         auto shader = compile_shader(iter.first, src);
         if (shader)
             GXM_MAP_ENUM(my_shaders.names, iter.first) = shader;
-        else
+        else {
+            GXM_LOG_F << "compile_shader failed";
             return false;
+        }
     }
 
     name_ = glCreateProgram();
@@ -159,7 +178,7 @@ bool gl_program::init(const source &p_source) {
         std::vector<GLchar> error_log(maxLength);
         glGetProgramInfoLog(name_, maxLength, &maxLength, &error_log[0]);
 
-        GXM_LOG_E << "glsl compile failed: " << error_log.data();
+        GXM_LOG_E << "glsl link failed: " << error_log.data();
         glDeleteProgram(name_); // Don't leak the shader.
         return false;
     }

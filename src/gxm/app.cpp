@@ -24,10 +24,18 @@ app::~app() {}
 void app::setup(int argc, char *argv[]) {
     unused(argc, argv);
 
+    GXM_LOG_I << "BOOST_LIB_VERSION: " << BOOST_LIB_VERSION;
+
+    log_utils::set_log_level(log_level::info);
+
     auto glfw_init_success = glfwInit();
     assert(glfw_init_success);
 
     const char *window_title = "GXM Game App";
+
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     main_window_ = glfwCreateWindow(main_window_size_.width,
                                     main_window_size_.height,
@@ -45,6 +53,10 @@ void app::setup(int argc, char *argv[]) {
 
     auto glew_init_result = glewInit();
     assert(glew_init_result == GLEW_OK);
+
+    glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
 
     gl_context::create_instance();
     gl_context_ = &(gl_context::instance());
@@ -74,9 +86,9 @@ void app::run() {
     auto clear_bits = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
                       GL_STENCIL_BUFFER_BIT;
     while (!glfwWindowShouldClose(main_window_)) {
-        update_();
         glClear(clear_bits);
-        gl_context_->draw();
+        update_();
+        // gl_context_->draw();
         glfwSwapBuffers(main_window_);
         glfwPollEvents();
     }
@@ -84,7 +96,6 @@ void app::run() {
 
 void app::set_window_title(const char *title) {
     assert(main_window_);
-
     glfwSetWindowTitle(main_window_, title);
 }
 

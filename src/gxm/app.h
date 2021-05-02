@@ -12,7 +12,8 @@ namespace gxm {
 
 class app : private boost::noncopyable {
 public:
-    using update_t = void (*)();
+    // using update_t = void (*)();
+    using update_t = std::function<void()>;
 
     app() noexcept;
     virtual ~app();

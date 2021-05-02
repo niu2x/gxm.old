@@ -70,6 +70,10 @@ public:
 
     void set_data(size_t offset, const void *ptr, size_t size);
 
+    void dump();
+
+    static void invalid_binds();
+
 private:
     GLuint name_;
 

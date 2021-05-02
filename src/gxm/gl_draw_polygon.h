@@ -8,6 +8,7 @@
 #include "gl_buffer.h"
 #include "gl_draw_command.h"
 #include "gl_vertex.h"
+#include "gl_vertex_array.h"
 
 namespace gxm {
 
@@ -30,7 +31,7 @@ private:
     gl_buffer vertex_buffer_;
     gl_buffer indice_buffer_;
 
-    GLuint vao_;
+    gl_vertex_array vertex_array_;
 };
 
 } // namespace gxm

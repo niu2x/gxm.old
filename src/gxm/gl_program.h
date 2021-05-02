@@ -13,7 +13,7 @@ namespace gxm {
 class gl_program : private boost::noncopyable {
 public:
     enum class shader_type : uint8_t {
-        vertex,
+        vertex = 0,
         fragment,
         geometry,
         count,
@@ -28,6 +28,8 @@ public:
     bool valid() const noexcept {
         return name_ != 0;
     }
+
+    void use();
 
 private:
     GLuint name_;
