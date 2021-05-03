@@ -29,15 +29,15 @@ std::string read_file(const char *pathname) {
 int main(int argc, char *argv[]) {
     gxm::app my_app;
 
-    auto glsl_vert = read_file("../res/glsl/default.vert");
-    auto glsl_frag = read_file("../res/glsl/default.frag");
+    auto glsl_vert = read_file("../examples/srgb.vert");
+    auto glsl_frag = read_file("../examples/srgb.frag");
 
     gxm::gl_program::source glsl_source;
     glsl_source[gxm::gl_program::shader_type::vertex]   = glsl_vert.c_str();
     glsl_source[gxm::gl_program::shader_type::fragment] = glsl_frag.c_str();
 
     my_app.setup(argc, argv);
-    my_app.set_window_title("triangle");
+    my_app.set_window_title("srgb");
     gxm::gl_context::instance().set_clear_color(gxm::color::black);
     gxm::gl_context::instance();
 
@@ -45,18 +45,22 @@ int main(int argc, char *argv[]) {
     assert(program.init(glsl_source));
 
     gxm::gl_draw_polygon triangle;
-    triangle.reserve_vertex(3);
-    triangle.reserve_indice(3);
+    triangle.reserve_vertex(4);
+    triangle.reserve_indice(6);
 
-    triangle.set_vertex(0, gxm::gl_vertex{0.9, 0.9, 0.1, 1, 0, 0, 1, 0, 0});
-    triangle.set_vertex(1, gxm::gl_vertex{-0.9, 0.9, 0.1, 0, 1, 0, 1, 0, 0});
-    triangle.set_vertex(2, gxm::gl_vertex{0, -0.9, 0.1, 0, 0, 1, 1, 0, 0});
+    triangle.set_vertex(0, gxm::gl_vertex{1, 1, 0.1, 1, 0, 0, 1, 0, 0});
+    triangle.set_vertex(1, gxm::gl_vertex{-1, 1, 0.1, 0, 1, 0, 1, 0, 0});
+    triangle.set_vertex(2, gxm::gl_vertex{-1, -1, 0.1, 0, 0, 1, 1, 0, 0});
+    triangle.set_vertex(3, gxm::gl_vertex{1, -1, 0.1, 0, 0, 1, 1, 0, 0});
 
     triangle.set_indice(0, 0);
     triangle.set_indice(1, 1);
     triangle.set_indice(2, 2);
+    triangle.set_indice(3, 0);
+    triangle.set_indice(4, 2);
+    triangle.set_indice(5, 3);
 
-    triangle.set_mode(gxm::gl_draw_polygon::mode_t::triangle);
+    triangle.set_mode(gxm::gl_draw_polygon::mode_t::line);
     triangle.set_program(&program);
     my_app.set_update([&triangle]() {
         triangle.draw();

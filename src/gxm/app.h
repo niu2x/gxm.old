@@ -38,11 +38,14 @@ private:
 
     int_size main_window_size_;
 
+    void handle_size_change(GLFWwindow *, int, int);
     void handle_key(
         GLFWwindow *window, int key, int scancode, int action, int mods);
 
     static void key_callback(
         GLFWwindow *window, int key, int scancode, int action, int mods);
+
+    static void size_change_callback(GLFWwindow *, int, int);
 
     void switch_to_fullscreen();
     void switch_to_window();

@@ -43,13 +43,13 @@ target_include_directories(gxm PUBLIC src)
 
 target_sources(gxm PRIVATE 
 	# src/main.cpp
-	src/gxm/texture.cpp
 	src/gxm/gl_buffer.cpp
 	src/gxm/gl_context.cpp
 	src/gxm/gl_draw_command.cpp
 	src/gxm/gl_blend.cpp
 	src/gxm/gl_program.cpp
 	src/gxm/gl_draw_polygon.cpp
+	src/gxm/gl_texture.cpp
 	src/gxm/gl_vertex.cpp
 	src/gxm/gl_vertex_array.cpp
 	src/gxm/exception.cpp
@@ -64,3 +64,6 @@ target_link_libraries(empty_window PRIVATE gxm)
 
 add_executable(triangle "examples/triangle.cpp")
 target_link_libraries(triangle PRIVATE gxm)
+
+add_executable(srgb "examples/srgb.cpp")
+target_link_libraries(srgb PRIVATE gxm)

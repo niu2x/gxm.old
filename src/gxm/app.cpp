@@ -36,6 +36,8 @@ void app::setup(int argc, char *argv[]) {
     // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //
+    glfwWindowHint(GLFW_SAMPLES, 8);
 
     main_window_ = glfwCreateWindow(main_window_size_.width,
                                     main_window_size_.height,
@@ -50,6 +52,7 @@ void app::setup(int argc, char *argv[]) {
     set_fullscreen(fullscreen_);
 
     glfwSetKeyCallback(main_window_, &key_callback);
+    glfwSetWindowSizeCallback(main_window_, &size_change_callback);
 
     auto glew_init_result = glewInit();
     assert(glew_init_result == GLEW_OK);
@@ -110,6 +113,18 @@ void app::key_callback(
     app *my_app = reinterpret_cast<app *>(glfwGetWindowUserPointer(window));
     assert(my_app);
     my_app->handle_key(window, key, scancode, action, mods);
+}
+
+void app::size_change_callback(GLFWwindow *window, int w, int h) {
+    app *my_app = reinterpret_cast<app *>(glfwGetWindowUserPointer(window));
+    assert(my_app);
+    my_app->handle_size_change(window, w, h);
+}
+
+void app::handle_size_change(GLFWwindow *window, int w, int h) {
+
+    unused(window);
+    glViewport(0, 0, w, h);
 }
 
 void app::handle_key(

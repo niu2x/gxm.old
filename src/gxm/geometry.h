@@ -35,6 +35,15 @@ public:
     static const color black;
 };
 
+enum class pixel_format {
+    rgba,
+    s_rgba,
+    rgb,
+    s_rgb,
+    alpha,
+    count,
+};
+
 } // namespace gxm
 
 #endif
