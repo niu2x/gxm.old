@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "gl_context.h"
+#include "gl_framebuffer.h"
 
 namespace gxm {
 
@@ -30,7 +31,17 @@ public:
 
     void set_update(update_t p_update) noexcept;
 
+    int_size main_window_size() const noexcept {
+        return main_window_size_;
+    }
+
+    static app &main() {
+        return *instance_;
+    }
+
 private:
+    static app *instance_;
+
     GLFWwindow *main_window_;
     bool        fullscreen_;
 

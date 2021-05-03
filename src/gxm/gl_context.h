@@ -23,6 +23,7 @@ public:
     void dump_infos();
 
     void set_clear_color(const color &p_color);
+    void set_depth_test_enable(bool b);
 
 private:
     gl_context();

@@ -1,5 +1,5 @@
-#ifndef GXM_TEXTURE_H
-#define GXM_TEXTURE_H
+#ifndef GXM_GL_RENDERBUFFER_H
+#define GXM_GL_RENDERBUFFER_H
 
 #include <GL/glew.h>
 #include <boost/noncopyable.hpp>
@@ -8,17 +8,14 @@
 
 namespace gxm {
 
-class gl_texture : boost::noncopyable {
+class gl_renderbuffer : boost::noncopyable {
 public:
     enum type_t {
-        tex_2d = 0,
+        stencil_depth = 0,
     };
-    gl_texture();
-    ~gl_texture();
+    gl_renderbuffer(size_t width, size_t height);
+    ~gl_renderbuffer();
 
-    bool load_from_file(const char *pathname, bool no_line = true);
-    void set_data(size_t w, size_t h, pixel_format format, void *data);
-    void generate_mipmap();
     void use(size_t texture_unit_idx);
 
     size_t width() const noexcept {

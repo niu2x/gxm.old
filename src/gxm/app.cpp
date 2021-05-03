@@ -13,13 +13,21 @@ const int_size default_window_size = {640, 480};
 
 } // namespace
 
+app *app::instance_ = nullptr;
+
 app::app() noexcept
     : main_window_(nullptr)
     , fullscreen_(false)
     , update_(&default_update)
-    , main_window_size_(default_window_size) {}
+    , main_window_size_(default_window_size) {
 
-app::~app() {}
+    assert(!instance_);
+    instance_ = this;
+}
+
+app::~app() {
+    instance_ = nullptr;
+}
 
 void app::set_window_size(int width, int height) {
     main_window_size_ = {width, height};
@@ -62,8 +70,13 @@ void app::setup(int argc, char *argv[]) {
     auto glew_init_result = glewInit();
     assert(glew_init_result == GLEW_OK);
 
+    gl_context::create_instance();
+    gl_context_ = &(gl_context::instance());
+    gl_context_->dump_infos();
+
+    gl_context_->set_depth_test_enable(true);
+
     glEnable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);
 
     glEnable(GL_LINE_SMOOTH);
@@ -74,12 +87,12 @@ void app::setup(int argc, char *argv[]) {
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
-    gl_context::create_instance();
-    gl_context_ = &(gl_context::instance());
-    gl_context_->dump_infos();
+    gl_framebuffer::setup();
 }
 
 void app::cleanup() noexcept {
+
+    gl_framebuffer::cleanup();
 
     gl_context_ = nullptr;
     gl_context::delete_instance();

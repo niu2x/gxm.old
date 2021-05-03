@@ -10,6 +10,12 @@ class size_t {
 public:
     T width, height;
 };
+
+template <class T>
+size_t<T> operator*(const size_t<T> &a, double b) {
+    return size_t<T>{(T)(a.width * b), (T)(a.height * b)};
+}
+
 } // namespace geometry
 
 using size     = geometry::size_t<double>;

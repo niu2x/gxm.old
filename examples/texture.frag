@@ -7,6 +7,8 @@ uniform sampler2D texture_1;
 uniform sampler2D texture_2;
 uniform sampler2D texture_3;
 
+uniform int gamma_enable;
+
 in vec4 v_color;
 in vec2 v_uv;
 

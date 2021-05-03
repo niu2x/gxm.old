@@ -44,6 +44,7 @@ target_include_directories(gxm PUBLIC libs/)
 
 target_sources(gxm PRIVATE 
 	# src/main.cpp
+	src/gxm/gl_renderbuffer.cpp
 	src/gxm/gl_buffer.cpp
 	src/gxm/gl_context.cpp
 	src/gxm/gl_draw_command.cpp
@@ -52,11 +53,13 @@ target_sources(gxm PRIVATE
 	src/gxm/gl_draw_polygon.cpp
 	src/gxm/gl_texture.cpp
 	src/gxm/gl_vertex.cpp
+	src/gxm/gl_framebuffer.cpp
 	src/gxm/gl_vertex_array.cpp
 	src/gxm/exception.cpp
 	src/gxm/geometry.cpp
 	src/gxm/log.cpp
 	src/gxm/app.cpp
+	src/gxm/glsl.cpp
 )
 
 
@@ -71,3 +74,6 @@ target_link_libraries(srgb PRIVATE gxm)
 
 add_executable(texture "examples/texture.cpp")
 target_link_libraries(texture PRIVATE gxm)
+
+add_executable(framebuffer "examples/framebuffer.cpp")
+target_link_libraries(framebuffer PRIVATE gxm)

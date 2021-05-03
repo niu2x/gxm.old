@@ -64,8 +64,6 @@ void gl_buffer::bind_to(bind_point target) {
     glBindBuffer(gl_target, name_);
 
     MAP(active_buffers, current_bp_) = name_;
-
-    GXM_LOG_I << "bind_to " << (int)target;
 }
 
 void gl_buffer::resize(size_t bytes) {

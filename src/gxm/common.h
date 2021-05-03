@@ -40,6 +40,14 @@ private:
     std::function<void()> delegate_;
 };
 
+#define GXM_CHECK_GL_ERROR()                                                   \
+    do {                                                                       \
+        auto e = glGetError();                                                 \
+        if (e) {                                                               \
+            GXM_LOG_E << __FILE__ << __LINE__ << "opengl error: " << e;        \
+        }                                                                      \
+    } while (false);
+
 } // namespace gxm
 
 #endif

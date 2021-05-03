@@ -36,4 +36,11 @@ void gl_context::dump_infos() {
               << glGetString(GL_SHADING_LANGUAGE_VERSION);
 }
 
+void gl_context::set_depth_test_enable(bool b) {
+    if (b)
+        glEnable(GL_DEPTH_TEST);
+    else
+        glDisable(GL_DEPTH_TEST);
+}
+
 } // namespace gxm

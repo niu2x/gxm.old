@@ -68,6 +68,8 @@ void gl_texture::set_data(size_t w, size_t h, pixel_format format, void *data) {
 
     width_  = w;
     height_ = h;
+
+    glBindTexture(target, 0);
 }
 
 void gl_texture::generate_mipmap() {}
