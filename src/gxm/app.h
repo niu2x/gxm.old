@@ -22,6 +22,7 @@ public:
     virtual void cleanup() noexcept;
 
     void set_window_title(const char *);
+    void set_window_size(int width, int height);
     void set_fullscreen(bool fullscreen);
     void toggle_fullscreen();
 

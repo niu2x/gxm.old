@@ -4,6 +4,7 @@
 #include <gxm/app.h>
 #include <gxm/gl_draw_polygon.h>
 #include <gxm/gl_program.h>
+#include <gxm/gl_texture.h>
 
 size_t file_size(FILE *fp) {
     assert(fp);
@@ -29,15 +30,15 @@ std::string read_file(const char *pathname) {
 int main(int argc, char *argv[]) {
     gxm::app my_app;
 
-    auto glsl_vert = read_file("../examples/srgb.vert");
-    auto glsl_frag = read_file("../examples/srgb.frag");
+    auto glsl_vert = read_file("../examples/texture.vert");
+    auto glsl_frag = read_file("../examples/texture.frag");
 
     gxm::gl_program::source glsl_source;
     glsl_source[gxm::gl_program::shader_type::vertex]   = glsl_vert.c_str();
     glsl_source[gxm::gl_program::shader_type::fragment] = glsl_frag.c_str();
 
     my_app.setup(argc, argv);
-    my_app.set_window_title("srgb");
+    my_app.set_window_title("texture");
     gxm::gl_context::instance().set_clear_color(gxm::color::black);
     gxm::gl_context::instance();
 
@@ -49,8 +50,8 @@ int main(int argc, char *argv[]) {
     triangle.reserve_indice(6);
 
     triangle.set_vertex(0, gxm::gl_vertex{1, 1, 0.1, 1, 1, 1, 1, 1, 0});
-    triangle.set_vertex(1, gxm::gl_vertex{-1, 1, 0.1, 0, 0, 0, 1, 0, 0});
-    triangle.set_vertex(2, gxm::gl_vertex{-1, -1, 0.1, 0, 0, 0, 1, 0, 1});
+    triangle.set_vertex(1, gxm::gl_vertex{-1, 1, 0.1, 1, 1, 1, 1, 0, 0});
+    triangle.set_vertex(2, gxm::gl_vertex{-1, -1, 0.1, 1, 1, 1, 1, 0, 1});
     triangle.set_vertex(3, gxm::gl_vertex{1, -1, 0.1, 1, 1, 1, 1, 1, 1});
 
     triangle.set_indice(0, 0);
@@ -62,6 +63,17 @@ int main(int argc, char *argv[]) {
 
     triangle.set_mode(gxm::gl_draw_polygon::mode_t::triangle);
     triangle.set_program(&program);
+
+    gxm::gl_texture tex0;
+    assert(tex0.load_from_file("../examples/mwq.jpeg"));
+
+    triangle.set_texture(0, &tex0);
+    triangle.set_texture(1, &tex0);
+    triangle.set_texture(2, &tex0);
+    triangle.set_texture(3, &tex0);
+
+    my_app.set_window_size(tex0.width(), tex0.height());
+
     my_app.set_update([&triangle]() {
         triangle.draw();
     });

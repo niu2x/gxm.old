@@ -21,6 +21,11 @@ app::app() noexcept
 
 app::~app() {}
 
+void app::set_window_size(int width, int height) {
+    main_window_size_ = {width, height};
+    switch_to_window();
+}
+
 void app::setup(int argc, char *argv[]) {
     unused(argc, argv);
 
@@ -63,6 +68,8 @@ void app::setup(int argc, char *argv[]) {
 
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POLYGON_SMOOTH);
+
+    glDisable(GL_FRAMEBUFFER_SRGB);
 
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
@@ -122,9 +129,10 @@ void app::size_change_callback(GLFWwindow *window, int w, int h) {
 }
 
 void app::handle_size_change(GLFWwindow *window, int w, int h) {
-
-    unused(window);
+    assert(window == main_window_);
     glViewport(0, 0, w, h);
+    if (!fullscreen_)
+        main_window_size_ = {w, h};
 }
 
 void app::handle_key(

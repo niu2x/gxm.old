@@ -66,7 +66,7 @@ GLuint compile_shader(gl_program::shader_type type, const char *source) {
     return name;
 }
 
-auto opt_enable = false;
+auto opt_enable = true;
 
 using opt_source =
     std::map<gl_program::shader_type, std::pair<const char *, std::string>>;
@@ -181,6 +181,19 @@ bool gl_program::init(const source &p_source) {
         GXM_LOG_E << "glsl link failed: " << error_log.data();
         glDeleteProgram(name_); // Don't leak the shader.
         return false;
+    }
+
+    glUseProgram(name_);
+
+    const int texture_capacity = 4;
+
+    char uniform_name[] = "texture_0";
+    for (int i = 0; i < texture_capacity; i++) {
+        uniform_name[8] = i + '0';
+        auto location   = glGetUniformLocation(name_, uniform_name);
+        if (location != -1) {
+            glUniform1i(location, i);
+        }
     }
 
     return true;

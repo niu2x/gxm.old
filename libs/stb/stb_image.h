@@ -4110,21 +4110,25 @@ stbi_inline static unsigned int stbi__zreceive(stbi__zbuf *z, int n)
 
 static int stbi__zhuffman_decode_slowpath(stbi__zbuf *a, stbi__zhuffman *z)
 {
-   int b,s,k;
-   // not resolved by fast table, so compute it the slow way
-   // use jpeg approach, which requires MSbits at top
-   k = stbi__bit_reverse(a->code_buffer, 16);
-   for (s=STBI__ZFAST_BITS+1; ; ++s)
-      if (k < z->maxcode[s])
-         break;
-   if (s >= 16) return -1; // invalid code!
-   // code size is s, so:
-   b = (k >> (16-s)) - z->firstcode[s] + z->firstsymbol[s];
-   if (b >= sizeof (z->size)) return -1; // some data was corrupt somewhere!
-   if (z->size[b] != s) return -1;  // was originally an assert, but report failure instead.
-   a->code_buffer >>= s;
-   a->num_bits -= s;
-   return z->value[b];
+    size_t b, s;
+    int    k;
+    // not resolved by fast table, so compute it the slow way
+    // use jpeg approach, which requires MSbits at top
+    k = stbi__bit_reverse(a->code_buffer, 16);
+    for (s = STBI__ZFAST_BITS + 1;; ++s)
+        if (k < z->maxcode[s])
+            break;
+    if (s >= 16)
+        return -1; // invalid code!
+    // code size is s, so:
+    b = (k >> (16 - s)) - z->firstcode[s] + z->firstsymbol[s];
+    if (b >= sizeof(z->size))
+        return -1; // some data was corrupt somewhere!
+    if (z->size[b] != s)
+        return -1; // was originally an assert, but report failure instead.
+    a->code_buffer >>= s;
+    a->num_bits -= s;
+    return z->value[b];
 }
 
 stbi_inline static int stbi__zhuffman_decode(stbi__zbuf *a, stbi__zhuffman *z)
@@ -6766,6 +6770,8 @@ static stbi_uc *stbi__gif_load_next(stbi__context *s, stbi__gif *g, int *comp, i
    }
 }
 
+static void stb_unused(...) {}
+
 static void *stbi__load_gif_main(stbi__context *s, int **delays, int *x, int *y, int *z, int *comp, int req_comp)
 {
    if (stbi__gif_test(s)) {
@@ -6777,6 +6783,8 @@ static void *stbi__load_gif_main(stbi__context *s, int **delays, int *x, int *y,
       int stride;
       int out_size = 0;
       int delays_size = 0;
+
+      stb_unused(out_size, delays_size);
       memset(&g, 0, sizeof(g));
       if (delays) {
          *delays = 0;

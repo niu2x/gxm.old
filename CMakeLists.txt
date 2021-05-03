@@ -40,6 +40,7 @@ else()
 endif()
 
 target_include_directories(gxm PUBLIC src)
+target_include_directories(gxm PUBLIC libs/)
 
 target_sources(gxm PRIVATE 
 	# src/main.cpp
@@ -67,3 +68,6 @@ target_link_libraries(triangle PRIVATE gxm)
 
 add_executable(srgb "examples/srgb.cpp")
 target_link_libraries(srgb PRIVATE gxm)
+
+add_executable(texture "examples/texture.cpp")
+target_link_libraries(texture PRIVATE gxm)

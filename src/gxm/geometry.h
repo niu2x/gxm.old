@@ -36,11 +36,11 @@ public:
 };
 
 enum class pixel_format {
-    rgba,
-    s_rgba,
+    red,
     rgb,
     s_rgb,
-    alpha,
+    rgba,
+    s_rgba,
     count,
 };
 

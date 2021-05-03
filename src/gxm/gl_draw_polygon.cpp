@@ -10,6 +10,8 @@ gl_draw_polygon::gl_draw_polygon()
     : vertex_count_(0)
     , indice_count_(0) {
 
+    memset(textures_, 0, sizeof(textures_));
+
     vertex_buffer_.set_usage_hint(gl_buffer::usage::dynamic_draw);
     indice_buffer_.set_usage_hint(gl_buffer::usage::dynamic_draw);
     assert(!glGetError());
@@ -48,6 +50,11 @@ void gl_draw_polygon::draw() {
     vertex_buffer_.bind_to(gl_buffer::bind_point::vertex);
     indice_buffer_.bind_to(gl_buffer::bind_point::vertex_indice);
 
+    for (auto i = 0; i < texture_capacity; i++)
+        if (textures_[i]) {
+            textures_[i]->use(i);
+        }
+
     program().use();
     blend().use();
 
@@ -76,6 +83,11 @@ void gl_draw_polygon::set_indice(size_t index, uint16_t indice) {
     assert(index < indice_count_);
     indice_buffer_.bind_to(gl_buffer::bind_point::vertex_indice);
     indice_buffer_.set_data(index * sizeof(uint16_t), &indice, sizeof(indice));
+}
+
+void gl_draw_polygon::set_texture(size_t idx, gl_texture *tex) noexcept {
+    assert(idx < texture_capacity);
+    textures_[idx] = tex;
 }
 
 } // namespace gxm

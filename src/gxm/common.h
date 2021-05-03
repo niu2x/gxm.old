@@ -28,6 +28,18 @@ inline void unused(...) {}
 #define GXM_MAP_ENUM(map, v)   map[uint8_t(v)]
 #define GXM_OFFSET_OF(st, mem) (&((reinterpret_cast<st *>(0))->mem))
 
+class auto_release {
+public:
+    auto_release(std::function<void()> delegate)
+        : delegate_(delegate) {}
+    ~auto_release() {
+        delegate_();
+    }
+
+private:
+    std::function<void()> delegate_;
+};
+
 } // namespace gxm
 
 #endif
