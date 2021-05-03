@@ -13,6 +13,10 @@ public:
     GLenum dst_factor;
 
     static const gl_blend normal;
+
+    void use() {
+        glBlendFunc(src_factor, dst_factor);
+    }
 };
 
 } // namespace gxm

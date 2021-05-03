@@ -29,8 +29,8 @@ public:
         return blend_;
     }
 
-    gl_program *program() const noexcept {
-        return program_;
+    gl_program &program() const noexcept {
+        return *program_;
     }
 
     mode_t mode() const noexcept {

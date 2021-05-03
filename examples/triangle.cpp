@@ -37,8 +37,8 @@ int main(int argc, char *argv[]) {
     glsl_source[gxm::gl_program::shader_type::fragment] = glsl_frag.c_str();
 
     my_app.setup(argc, argv);
-    my_app.set_window_title("empty window");
-    gxm::gl_context::instance().set_clear_color(gxm::color::blue);
+    my_app.set_window_title("triangle");
+    gxm::gl_context::instance().set_clear_color(gxm::color::black);
     gxm::gl_context::instance();
 
     gxm::gl_program program;
@@ -46,17 +46,20 @@ int main(int argc, char *argv[]) {
 
     gxm::gl_draw_polygon triangle;
     triangle.reserve_vertex(3);
-    triangle.reserve_indice(3);
+    triangle.reserve_indice(6);
 
-    triangle.set_vertex(0, gxm::gl_vertex{0.5, 0.5, 0.1, 0, 0, 0, 0, 0, 0});
-    triangle.set_vertex(1, gxm::gl_vertex{-0.5, 0.5, 0.1, 0, 0, 0, 0, 0, 0});
-    triangle.set_vertex(2, gxm::gl_vertex{0, -0.5, 0.1, 0, 0, 0, 0, 0, 0});
+    triangle.set_vertex(0, gxm::gl_vertex{0.9, 0.9, 0.1, 1, 0, 0, 1, 0, 0});
+    triangle.set_vertex(1, gxm::gl_vertex{-0.9, 0.9, 0.1, 0, 1, 0, 1, 0, 0});
+    triangle.set_vertex(2, gxm::gl_vertex{0, -0.9, 0.1, 0, 0, 1, 1, 0, 0});
 
     triangle.set_indice(0, 0);
     triangle.set_indice(1, 1);
-    triangle.set_indice(2, 2);
+    triangle.set_indice(2, 1);
+    triangle.set_indice(3, 2);
+    triangle.set_indice(4, 2);
+    triangle.set_indice(5, 0);
 
-    triangle.set_mode(gxm::gl_draw_polygon::mode_t::triangle);
+    triangle.set_mode(gxm::gl_draw_polygon::mode_t::line);
     triangle.set_program(&program);
     my_app.set_update([&triangle]() {
         triangle.draw();

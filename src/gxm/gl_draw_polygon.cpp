@@ -48,8 +48,9 @@ void gl_draw_polygon::draw() {
     vertex_buffer_.bind_to(gl_buffer::bind_point::vertex);
     indice_buffer_.bind_to(gl_buffer::bind_point::vertex_indice);
 
-    program()->use();
-    glBlendFunc(GL_ONE, GL_ONE);
+    program().use();
+    blend().use();
+
     auto m = GXM_MAP_ENUM(gl_mode_map, mode());
     glDrawElements(m, indice_count_, GL_UNSIGNED_SHORT, 0);
 
