@@ -77,3 +77,6 @@ target_link_libraries(texture PRIVATE gxm)
 
 add_executable(framebuffer "examples/framebuffer.cpp")
 target_link_libraries(framebuffer PRIVATE gxm)
+
+add_executable(gaussian_filter "examples/gaussian_filter.cpp")
+target_link_libraries(gaussian_filter PRIVATE gxm)

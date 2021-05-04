@@ -5,14 +5,19 @@
 namespace gxm {
 
 std::unique_ptr<gl_draw_polygon> gl_framebuffer::draw_    = nullptr;
-std::unique_ptr<gl_program>      gl_framebuffer::program_ = nullptr;
+std::unique_ptr<gl_program>      gl_framebuffer::default_program_ = nullptr;
 
 gl_framebuffer *gl_framebuffer::fb_stack_[128];
 
 int gl_framebuffer::fb_stack_top_ = 0;
 
+void gl_framebuffer::set_program(gl_program *p) {
+    program_ = p;
+}
+
 gl_framebuffer::gl_framebuffer(const int_size &size)
     : size_(size)
+    , program_(nullptr)
     , stencil_depth_(size.width, size.height) {
     glGenFramebuffers(1, &name_);
     assert(name_);
@@ -46,6 +51,8 @@ gl_framebuffer::~gl_framebuffer() {
 
 void gl_framebuffer::draw() {
     glClear(0xFFFFFFFF);
+
+    draw_->set_program(program_ ? program_ : default_program_.get());
     draw_->set_texture(0, &color_);
     draw_->draw();
 }
@@ -105,15 +112,15 @@ void gl_framebuffer::setup() {
 
     draw_->set_mode(gl_draw_polygon::mode_t::triangle);
 
-    assert(!program_);
-    program_ = std::make_unique<gl_program>();
+    assert(!default_program_);
+    default_program_ = std::make_unique<gl_program>();
 
     gl_program::source glsl_source;
     glsl_source[gl_program::shader_type::vertex]   = glsl::framebuffer_vert;
     glsl_source[gl_program::shader_type::fragment] = glsl::framebuffer_frag;
-    assert(program_->init(glsl_source));
+    assert(default_program_->init(glsl_source));
 
-    draw_->set_program(program_.get());
+    draw_->set_program(default_program_.get());
 }
 void gl_framebuffer::cleanup() {
     draw_ = nullptr;

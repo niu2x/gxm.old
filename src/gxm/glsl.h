@@ -6,6 +6,8 @@ struct glsl {
 
     static const char *framebuffer_frag;
 
+    static const char *gaussian_filter_frag;
+
     static const char *default_vert;
 
     static const char *default_frag;

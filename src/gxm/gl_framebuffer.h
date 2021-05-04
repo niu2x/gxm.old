@@ -39,6 +39,8 @@ public:
     }
     void clear();
 
+    void set_program(gl_program *p);
+
     static void setup();
     static void cleanup();
 
@@ -46,6 +48,7 @@ private:
     int_size size_;
     GLuint   name_;
 
+    gl_program *    program_;
     gl_texture      color_;
     gl_renderbuffer stencil_depth_;
 
@@ -54,7 +57,7 @@ private:
     static int             fb_stack_top_;
 
     static std::unique_ptr<gl_draw_polygon> draw_;
-    static std::unique_ptr<gl_program>      program_;
+    static std::unique_ptr<gl_program>      default_program_;
 };
 
 } // namespace gxm
