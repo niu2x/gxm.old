@@ -22,8 +22,9 @@ public:
 private:
     GLFWwindow *glfw_window_;
 
-    static void                  setup();
-    static void                  cleanup();
+    static void setup();
+    static void cleanup();
+
     static std::atomic<uint32_t> instance_counter;
 };
 
