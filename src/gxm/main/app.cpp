@@ -7,7 +7,8 @@
 namespace gxm::main {
 
 app::app()
-    : exit_code_(EXIT_SUCCESS) {}
+    : exit_code_(EXIT_SUCCESS)
+    , should_exit_(false) {}
 app::~app() {}
 
 void app::setup() {
@@ -17,10 +18,14 @@ void app::setup() {
 
 void app::cleanup() {}
 void app::run() {
-    bool should_exit = true;
-    do {
-        should_exit = window_->iterate();
-    } while (!should_exit);
+    bool clicked_close;
+
+    while (!should_exit_) {
+        clicked_close = window_->iterate();
+        if (clicked_close) {
+            handle_input(input::event(input::event::close));
+        }
+    }
 }
 
 void app::init_render() {
@@ -33,6 +38,20 @@ void app::init_window() {
     GXM_ASSERT(window_ == nullptr, "window_ isn't nullptr");
     window_ = render_->create_window();
     window_->show();
+}
+
+void app::exit(int code) {
+    exit_code_   = code;
+    should_exit_ = true;
+}
+
+void app::handle_input(const input::event &e) {
+    switch (e.type()) {
+        case input::event::close: {
+            exit(EXIT_SUCCESS);
+            break;
+        }
+    }
 }
 
 } // namespace gxm::main

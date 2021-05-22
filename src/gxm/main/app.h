@@ -6,6 +6,7 @@
 #include <boost/noncopyable.hpp>
 
 #include <gxm/common.h>
+#include <gxm/main/input.h>
 #include <gxm/render/render.h>
 
 namespace gxm::main {
@@ -21,12 +22,16 @@ public:
 
     virtual void run();
 
+    virtual void handle_input(const input::event &e);
+
     int exit_code() const noexcept {
         return exit_code_;
     }
+    void exit(int code);
 
 private:
     int exit_code_;
+    bool should_exit_;
 
     std::unique_ptr<render::render> render_;
     std::unique_ptr<render::window> window_;
