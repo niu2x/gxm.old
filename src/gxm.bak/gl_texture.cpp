@@ -83,12 +83,14 @@ bool gl_texture::load_from_file(const char *pathname, bool no_line) {
 
     int      w, h, channels;
     uint8_t *data = stbi_load(pathname, &w, &h, &channels, 0);
-    if (!data)
+    if (!data){
         return false;
+    }
 
     auto_release free_image([data]() {
         stbi_image_free(data);
     });
+
 
     switch (channels) {
         case 1: {

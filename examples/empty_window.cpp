@@ -1,12 +1,18 @@
-#include <gxm/app.h>
+#include <iostream>
 
-int main(int argc, char *argv[]) {
-    gxm::app my_app;
+#include <gxm/gxm.h>
 
-    my_app.setup(argc, argv);
-    my_app.set_window_title("empty window");
-    my_app.run();
-    my_app.cleanup();
+namespace {
 
-    return 0;
-}
+using base_app = gxm::main::app;
+class my_app: public gxm::main::app {
+public:
+	virtual void setup() override {
+		base_app::setup();
+		std::cout << "my_app setup" << std::endl;
+	}
+};
+
+};
+
+GXM_MAIN(my_app);

@@ -1,0 +1,3 @@
+[submodule "libs/libgxm"]
+	path = libs/libgxm
+	url = https://github.com/niu2x/libgxm
