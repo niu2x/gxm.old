@@ -12,6 +12,7 @@ find_package(GLEW)
 find_package(Threads)
 find_package(Boost COMPONENTS log)
 add_subdirectory(${PROJECT_SOURCE_DIR}/libs/glsl-optimizer)
+find_package(Lua51)
 
 add_subdirectory(src/gxm)
 

@@ -3,6 +3,9 @@
 
 #include <cstdint>
 
+#include <gxm/common.h>
+#include <gxm/script/lua_engine.h>
+
 namespace gxm {
 
 struct version {
@@ -13,6 +16,6 @@ struct version {
 
 } // namespace gxm
 
-#include <gxm/main/app.h>
+// #include <gxm/main/app.h>
 
 #endif
